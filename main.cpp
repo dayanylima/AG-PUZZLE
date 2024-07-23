@@ -49,7 +49,7 @@ int main()
         file_read(file_name, instances);
 
         print_instances(instances);
-        // passar a primeira instance
+        // passa a primeira instance
         Puzzle puzzle(instances[0]);
         puzzle.print_board();
     }
