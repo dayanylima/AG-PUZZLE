@@ -9,13 +9,11 @@ using namespace std;
 class Puzzle
 {
 private:
-    vector<int> board;
+    vector<int> board; // será um vetor, não uma matriz
 
 public:
-    Puzzle(string &file_name);
-
-    getline(inputFile, line);
-    stringstream ss(line);
+    Puzzle(vector<int> instance);
+    void print_board();
 };
 
 #endif // PUZZLE_H

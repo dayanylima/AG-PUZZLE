@@ -3,16 +3,19 @@
 #include <fstream>
 #include <sstream>
 
-Puzzle::Puzzle(string &file_name)
+Puzzle::Puzzle(vector<int> instance)
 {
-   string line;
+    board = instance;
+}
 
-    ifstream inputFile(file_name);
-    if (!inputFile)
+void Puzzle::print_board()
+{
+    cout << "Board: " << endl;
+    for (size_t i = 0; i < board.size(); ++i)
     {
-        cerr << "Erro ao abrir o arquivo." << endl;
-        throw runtime_error("Erro ao abrir o arquivo.");
+        if (i % 3 == 0 && i != 0)
+            cout << endl;
+        cout << board[i] << " ";
     }
-
-   
+    cout << endl;
 }
