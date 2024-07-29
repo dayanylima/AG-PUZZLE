@@ -16,8 +16,7 @@ using namespace std;
 struct PuzzleState
 {
 private:
-    vector<int> board;  // será um vetor, não uma matriz
-    int empty_position; // posição do zero(vazio) no tabuleiro
+    vector<int> board; // será um vetor, não uma matriz
     vector<char> path;
     int total_cust, accumulated_cost, heuristic;
 
@@ -35,20 +34,12 @@ public:
     size_t generateHash() const; // Nova função para gerar hash
 };
 
-struct CompareStates
-{
-    bool operator()(const PuzzleState &state1, const PuzzleState &state2) const
-    {
-        return state1.getTotalCost() > state2.getTotalCost();
-    }
-};
-
 class Puzzle
 {
 private:
     vector<int> initial_board;
-    priority_queue<PuzzleState, vector<PuzzleState>, CompareStates> priority; // fila de prioridade
-    unordered_set<size_t> visited;                                             // armazena hash dos estados já visitados
+    priority_queue<PuzzleState, vector<PuzzleState>, function<bool(const PuzzleState&, const PuzzleState&)>> priority; // fila de prioridade
+    unordered_set<size_t> visited; // armazena hash dos estados já visitados
 
 public:
     Puzzle(vector<int> instance);

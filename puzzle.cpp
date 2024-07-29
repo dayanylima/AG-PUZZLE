@@ -125,9 +125,11 @@ size_t PuzzleState::generateHash() const
 }
 
 Puzzle::Puzzle(vector<int> instance)
-    : initial_board(instance)
+    : initial_board(instance),
+      priority([](const PuzzleState &state1, const PuzzleState &state2) {
+          return state1.getTotalCost() > state2.getTotalCost();
+      })
 {
-    priority = priority_queue<PuzzleState, vector<PuzzleState>, CompareStates>();
 }
 
 void Puzzle::print_board()
