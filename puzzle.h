@@ -30,16 +30,16 @@ public:
     int getAccumulatedCost() const;
     int getHeuristic() const;
     vector<char> getPath() const;
-    const vector<int>& getBoard() const;
-    size_t generateHash() const; // Nova função para gerar hash
+    const vector<int> &getBoard() const;
+    size_t generateHash() const; 
 };
 
 class Puzzle
 {
 private:
     vector<int> initial_board;
-    priority_queue<PuzzleState, vector<PuzzleState>, function<bool(const PuzzleState&, const PuzzleState&)>> priority; // fila de prioridade
-    unordered_set<size_t> visited; // armazena hash dos estados já visitados
+    priority_queue<PuzzleState, vector<PuzzleState>, function<bool(const PuzzleState &, const PuzzleState &)>> priority; // fila de prioridade
+    unordered_set<size_t> visited;                                                                                       // armazena hash dos estados já visitados
 
 public:
     Puzzle(vector<int> instance);

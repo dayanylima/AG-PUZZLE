@@ -50,41 +50,22 @@ vector<PuzzleState> PuzzleState::generateMovements() const
         }
     }
 
-    if (y > 0)
+    auto addMovement = [&](int newX, int newY, char direction)
     {
-        vector<int> newBoard = board;
-        swap(newBoard[x + y * 3], newBoard[x + (y - 1) * 3]);
-        vector<char> newPath = path;
-        newPath.push_back('U');
-        movements.emplace_back(newBoard, newPath, accumulated_cost + 1);
-    }
+        if (newX >= 0 && newX < 3 && newY >= 0 && newY < 3)
+        {
+            vector<int> newBoard = board;
+            swap(newBoard[x + y * 3], newBoard[newX + newY * 3]);
+            vector<char> newPath = path;
+            newPath.push_back(direction);
+            movements.emplace_back(newBoard, newPath, accumulated_cost + 1);
+        }
+    };
 
-    if (y < 2)
-    {
-        vector<int> newBoard = board;
-        swap(newBoard[x + y * 3], newBoard[x + (y + 1) * 3]);
-        vector<char> newPath = path;
-        newPath.push_back('D');
-        movements.emplace_back(newBoard, newPath, accumulated_cost + 1);
-    }
-
-    if (x > 0)
-    {
-        vector<int> newBoard = board;
-        swap(newBoard[x + y * 3], newBoard[x - 1 + y * 3]);
-        vector<char> newPath = path;
-        newPath.push_back('L');
-        movements.emplace_back(newBoard, newPath, accumulated_cost + 1);
-    }
-
-    if (x < 2)
-    {
-        vector<int> newBoard = board;
-        swap(newBoard[x + y * 3], newBoard[x + 1 + y * 3]);
-        vector<char> newPath = path;
-        newPath.push_back('R');
-        movements.emplace_back(newBoard, newPath, accumulated_cost + 1);
-    }
+    addMovement(x, y - 1, 'U'); // UP
+    addMovement(x, y + 1, 'D'); // DOWN
+    addMovement(x - 1, y, 'L'); // LEFT
+    addMovement(x + 1, y, 'R'); // RIGHT
 
     return movements;
 }
@@ -109,26 +90,25 @@ int PuzzleState::getHeuristic() const
     return heuristic;
 }
 
-const vector<int>& PuzzleState::getBoard() const
+const vector<int> &PuzzleState::getBoard() const
 {
     return board;
 }
 
 size_t PuzzleState::generateHash() const
 {
-    string board_str;
+    size_t hash = 0;
     for (int tile : board)
     {
-        board_str += to_string(tile) + ",";
+        hash = hash * 31 + tile;
     }
-    return hash<string>{}(board_str);
+    return hash;
 }
 
 Puzzle::Puzzle(vector<int> instance)
     : initial_board(instance),
-      priority([](const PuzzleState &state1, const PuzzleState &state2) {
-          return state1.getTotalCost() > state2.getTotalCost();
-      })
+      priority([](const PuzzleState &state1, const PuzzleState &state2)
+               { return state1.getTotalCost() > state2.getTotalCost(); })
 {
 }
 
