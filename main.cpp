@@ -43,19 +43,19 @@ void print_instances(const vector<vector<int>> &instances)
     }
 }
 
-void exibirSolucao(const vector<char> &solucao, const vector<int> &tabuleiroInicial)
+void finalSolution(const vector<char> &solution, const vector<int> &initial_board)
 {
-    cout << "Solucao encontrada em " << solucao.size() << " passos: ";
-    for (char c : solucao)
+    cout << "Numero de passos: " << solution.size();
+    for (char s : solution)
     {
-        cout << c << " ";
+        cout << s << " ";
     }
     cout << endl;
 
     cout << "Tabuleiro inicial:" << endl;
     for (int i = 0; i < 9; i++)
     {
-        cout << tabuleiroInicial[i] << " ";
+        cout << initial_board[i] << " ";
         if ((i + 1) % 3 == 0)
         {
             cout << endl;
@@ -64,34 +64,34 @@ void exibirSolucao(const vector<char> &solucao, const vector<int> &tabuleiroInic
     cout << endl;
 
     cout << "Movimentos:" << endl;
-    vector<int> tabuleiroAtual = tabuleiroInicial;
+    vector<int> current_board = initial_board;
 
-    for (char c : solucao)
+    for (char s : solution)
     {
-        cout << "Movimento " << c << ":" << endl;
-        int indiceZero = find(tabuleiroAtual.begin(), tabuleiroAtual.end(), 0) - tabuleiroAtual.begin();
-        int x = indiceZero % 3;
-        int y = indiceZero / 3;
+        cout << "Movimento " << s << ":" << endl;
+        int index_zero = find(current_board.begin(), current_board.end(), 0) - current_board.begin();
+        int x = index_zero % 3;
+        int y = index_zero / 3;
 
-        switch (c)
+        switch (s)
         {
         case 'U': // UP
-            swap(tabuleiroAtual[indiceZero], tabuleiroAtual[x + (y - 1) * 3]);
+            swap(current_board[index_zero], current_board[x + (y - 1) * 3]);
             break;
         case 'D': // DOWN
-            swap(tabuleiroAtual[indiceZero], tabuleiroAtual[x + (y + 1) * 3]);
+            swap(current_board[index_zero], current_board[x + (y + 1) * 3]);
             break;
         case 'L': // LEFT
-            swap(tabuleiroAtual[indiceZero], tabuleiroAtual[x - 1 + y * 3]);
+            swap(current_board[index_zero], current_board[x - 1 + y * 3]);
             break;
         case 'R': // RIGHT
-            swap(tabuleiroAtual[indiceZero], tabuleiroAtual[x + 1 + y * 3]);
+            swap(current_board[index_zero], current_board[x + 1 + y * 3]);
             break;
         }
 
         for (int i = 0; i < 9; i++)
         {
-            cout << tabuleiroAtual[i] << " ";
+            cout << current_board[i] << " ";
             if ((i + 1) % 3 == 0)
             {
                 cout << endl;
@@ -117,7 +117,7 @@ int main()
         vector<char> solution = puzzle.solve(evaluated_states);
         auto end_time = high_resolution_clock::now(); // Fim da medição do tempo
 
-        exibirSolucao(solution, instances[0]);
+        finalSolution(solution, instances[0]);
 
         auto duration = duration_cast<milliseconds>(end_time - start_time).count();
         cout << "Tempo de execucao: " << duration << " ms" << endl;
