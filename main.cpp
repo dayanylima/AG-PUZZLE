@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <chrono>
+#include <algorithm>
 #include "puzzle.h"
 
 using namespace std;
@@ -43,9 +44,21 @@ void print_instances(const vector<vector<int>> &instances)
     }
 }
 
+void print_board(const vector<int> &board)
+{
+    for (int i = 0; i < 9; i++)
+    {
+        cout << board[i] << " ";
+        if ((i + 1) % 3 == 0)
+        {
+            cout << endl;
+        }
+    }
+}
+
 void finalSolution(const vector<char> &solution, const vector<int> &initial_board)
 {
-    cout << "Numero de passos: " << solution.size();
+    cout << "Numero de passos: " << solution.size() << endl;
     for (char s : solution)
     {
         cout << s << " ";
@@ -53,50 +66,53 @@ void finalSolution(const vector<char> &solution, const vector<int> &initial_boar
     cout << endl;
 
     cout << "Tabuleiro inicial:" << endl;
-    for (int i = 0; i < 9; i++)
-    {
-        cout << initial_board[i] << " ";
-        if ((i + 1) % 3 == 0)
-        {
-            cout << endl;
-        }
-    }
+    print_board(initial_board);
     cout << endl;
 
     cout << "Movimentos:" << endl;
     vector<int> current_board = initial_board;
+    int zero_index = find(current_board.begin(), current_board.end(), 0) - current_board.begin();
+    int x, y;
 
     for (char s : solution)
     {
-        cout << "Movimento " << s << ":" << endl;
-        int index_zero = find(current_board.begin(), current_board.end(), 0) - current_board.begin();
-        int x = index_zero % 3;
-        int y = index_zero / 3;
+        x = zero_index % 3;
+        y = zero_index / 3;
 
         switch (s)
         {
         case 'U': // UP
-            swap(current_board[index_zero], current_board[x + (y - 1) * 3]);
+            if (y > 0)
+            {
+                swap(current_board[zero_index], current_board[zero_index - 3]);
+                zero_index -= 3;
+            }
             break;
         case 'D': // DOWN
-            swap(current_board[index_zero], current_board[x + (y + 1) * 3]);
+            if (y < 2)
+            {
+                swap(current_board[zero_index], current_board[zero_index + 3]);
+                zero_index += 3;
+            }
             break;
         case 'L': // LEFT
-            swap(current_board[index_zero], current_board[x - 1 + y * 3]);
+            if (x > 0)
+            {
+                swap(current_board[zero_index], current_board[zero_index - 1]);
+                zero_index -= 1;
+            }
             break;
         case 'R': // RIGHT
-            swap(current_board[index_zero], current_board[x + 1 + y * 3]);
+            if (x < 2)
+            {
+                swap(current_board[zero_index], current_board[zero_index + 1]);
+                zero_index += 1;
+            }
             break;
         }
 
-        for (int i = 0; i < 9; i++)
-        {
-            cout << current_board[i] << " ";
-            if ((i + 1) % 3 == 0)
-            {
-                cout << endl;
-            }
-        }
+        cout << "Movimento " << s << ":" << endl;
+        print_board(current_board);
         cout << endl;
     }
 }
